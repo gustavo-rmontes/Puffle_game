@@ -6,15 +6,16 @@ import java.io.*;
 import javax.imageio.*;
 
 class Jogo extends JFrame{
+    // Constantes para o vetor de imagens a serem inseridas
     final int FUNDO = 0;
     final int PRETO = 1;
     final int AZUL = 2;
     final int COME = 3;
+
     int estado = AZUL; 
 
-
     Image img[] = new Image[20];
-    int posX = 10;
+    int posX = 10; // controla a posição horizontal do jogador
     Timer timer;
     Desenho des = new Desenho();
     
@@ -36,23 +37,23 @@ class Jogo extends JFrame{
         public void paintComponent(Graphics g){
             super.paintComponent(g);
             g.drawImage(img[FUNDO], 0, 0, getSize().width, getSize().height, this);
-            g.drawImage(img[estado], posX, getSize().height - img[estado].getHeight(this) - 10, this);
+            g.drawImage(img[AZUL], posX, getSize().height - img[AZUL].getHeight(this) - 10, this);
             g.drawImage(img[PRETO], posX+700, getSize().height - img[AZUL].getHeight(this) - 10, this);
             Toolkit.getDefaultToolkit().sync();    
         }
     }
 
     void andaPDireita(){
-        if(estado == COME){
-            estado = AZUL;
-        }
+        // if(estado == COME){
+        //     estado = AZUL;
+        // }
         posX += 10;
         repaint();
     }
     void andaPEsquerda(){
-        if(estado == COME){
-            estado = AZUL;
-        }
+        // if(estado == COME){
+        //     estado = AZUL;
+        // }
         posX -= 10;
         repaint();
     }
@@ -65,11 +66,11 @@ class Jogo extends JFrame{
     class TrataTeclas extends KeyAdapter{ // classe que trata o movimento das teclas
         public void KeyPressed(KeyEvent e){
             if(e.getKeyCode() == KeyEvent.VK_RIGHT) { // Tecla '->'
-                estado = AZUL;
+                // estado = AZUL;
                 andaPDireita();
             }
             else if(e.getKeyCode() == KeyEvent.VK_LEFT){ // Tecla '<-'
-                estado = AZUL;
+                // estado = AZUL;
                 andaPEsquerda();
             }
             // else if(e.getKeyCode() == KeyEvent.VK_S){ // Tecla 'S'
@@ -86,14 +87,15 @@ class Jogo extends JFrame{
         pack();
         setVisible(true);
         addKeyListener(new TrataTeclas()); // classe que trata os eventos ligados às teclas
-        new Timer(100, new ActionListener(){
+        timer = new Timer(100, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae){
                 andaPDireita();
                 andaPEsquerda();
                 // comeFruta();
             }
-        }).start();
+        });
+        timer.start();
     }
 
     static public void main(String args[]){
