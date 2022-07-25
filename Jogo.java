@@ -30,7 +30,7 @@ class Jogo extends JFrame{
             try{
                 setPreferredSize(new Dimension(828, 467));
                 img[FUNDO] = ImageIO.read(new File("fundo.jpg"));
-                img[COMIDA] = ImageIO.read(new File("comida"));
+                // img[COMIDA] = ImageIO.read(new File("comida"));
                 img[PRETO] = ImageIO.read(new File("puffle.png"));
                 img[AZUL] = ImageIO.read(new File("puffle_azul.png"));
                 img[COME] = ImageIO.read(new File("azul_come.jpg"));
@@ -43,7 +43,7 @@ class Jogo extends JFrame{
         public void paintComponent(Graphics g){
             super.paintComponent(g);
             g.drawImage(img[FUNDO], 0, 0, getSize().width, getSize().height, this);
-            g.drawImage(img[COMIDA], posicaoAleatoria(), posicaoAleatoria(), getSize().width, getSize().height, this);
+            // g.drawImage(img[COMIDA], posicaoAleatoria(), posicaoAleatoria(), getSize().width, getSize().height, this);
             g.drawImage(img[estado], posX, getSize().height - img[estado].getHeight(this) - 10, this);
             g.drawImage(img[PRETO], posXPlayer2, getSize().height - img[PRETO].getHeight(this) - 10, this);
             Toolkit.getDefaultToolkit().sync();    
@@ -86,12 +86,6 @@ class Jogo extends JFrame{
             else if(e.getKeyCode() == KeyEvent.VK_C){ // Tecla 'C'
                 comeFruta();
             }
-        }
-    }
-
-    class Comida extends Thread{
-        public void run(){
-            
         }
     }
     
