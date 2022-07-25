@@ -11,26 +11,25 @@ import javax.imageio.*;
 import java.util.Random;
 
 // Painel dos alvos (comida)
-class PainelComida extends JPanel{
-    Image img;
-    Random random = new Random();
-    int posX = random.nextInt(800);
-    int posY = 50;
-    PainelComida(){
-        Graphics g;
-        try {
-            Image img = ImageIO.read(new File("figuras/food1.png"));
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Erro no carregamento da imagem\n"+e, "Erro", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-    }
+// class PainelComida extends JPanel{
+//     Image img;
+//     Random random = new Random();
+//     int posX = random.nextInt(800);
+//     int posY = 50;
+//     PainelComida(){
+//         try {
+//             Image img = ImageIO.read(new File("figuras/food1.png"));
+//         } catch (IOException e) {
+//             JOptionPane.showMessageDialog(this, "Erro no carregamento da imagem\n"+e, "Erro", JOptionPane.ERROR_MESSAGE);
+//             System.exit(1);
+//         }
+//     }
 
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        g.drawImage(img, posX, posY, getSize().width, getSize().height, this);
-    }
-}
+//     public void paintComponent(Graphics g){
+//         super.paintComponent(g);
+//         g.drawImage(img, posX, posY, getSize().width, getSize().height, this);
+//     }
+// }
 
 class Jogo extends JFrame{
     // Constantes para o vetor de imagens a serem inseridas
@@ -44,12 +43,8 @@ class Jogo extends JFrame{
     int posX = 10; // controla a posição horizontal do jogador
     final int posXPlayer2 = 710; // posição constante do jogador 2
 
-    Random ComRandX = new Random();
-    Random ComRandy = new Random();
-
-    int Comx, Comy;
-
     Image img[] = new Image[20];
+    Timer t;
     Desenho des = new Desenho();
     
     class Desenho extends JPanel{
@@ -59,7 +54,7 @@ class Jogo extends JFrame{
                 // Tela
                 img[FUNDO] = ImageIO.read(new File("figuras/fundo.jpg"));
                 // Alvo (comida)
-                // img[COMIDA] = ImageIO.read(new File("figuras/food1.png"));
+                img[COMIDA] = ImageIO.read(new File("figuras/food1.png"));
                 // Personagens e suas transições
                 img[PRETO] = ImageIO.read(new File("figuras/puffle.png"));
                 img[ESTADO_AZUL] = ImageIO.read(new File("figuras/puffle_azul.png"));
@@ -79,9 +74,17 @@ class Jogo extends JFrame{
             // Jogador 2 (constante)
             g.drawImage(img[PRETO], posXPlayer2, getSize().height - img[PRETO].getHeight(this) - 10, this);
             // Gera os alvos (comidas)
-            new PainelComida();
+            g.drawImage(img[COMIDA], comX, comY, this);
             Toolkit.getDefaultToolkit().sync();    
         }
+    }
+
+    Random random = new Random();
+    int comX = random.nextInt(400);
+    int comY = 50;
+    // Função que decrementa a posição y do alvo (comida)
+    public void inc() {
+        comY++;
     }
 
     // Funções de movimentação
@@ -126,6 +129,14 @@ class Jogo extends JFrame{
         pack();
         setVisible(true);
         addKeyListener(new TrataTeclas()); // classe que trata os eventos ligados às teclas
+        // Timer para que o alvo (comida) desça
+        t = new Timer(100, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae){
+                inc();
+            }
+        });
+        t.start();
     }
 
     static public void main(String args[]){
