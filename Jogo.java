@@ -10,6 +10,28 @@ import java.io.*;
 import javax.imageio.*;
 import java.util.Random;
 
+// Painel dos alvos (comida)
+class PainelComida extends JPanel{
+    Image img;
+    Random random = new Random();
+    int posX = random.nextInt(800);
+    int posY = 50;
+    PainelComida(){
+        Graphics g;
+        try {
+            Image img = ImageIO.read(new File("figuras/food1.png"));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro no carregamento da imagem\n"+e, "Erro", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.drawImage(img, posX, posY, getSize().width, getSize().height, this);
+    }
+}
+
 class Jogo extends JFrame{
     // Constantes para o vetor de imagens a serem inseridas
     final int FUNDO = 0;
@@ -35,13 +57,13 @@ class Jogo extends JFrame{
             try{
                 setPreferredSize(new Dimension(828, 467));
                 // Tela
-                img[FUNDO] = ImageIO.read(new File("fundo.jpg"));
+                img[FUNDO] = ImageIO.read(new File("figuras/fundo.jpg"));
                 // Alvo (comida)
-                img[COMIDA] = ImageIO.read(new File("food1.png"));
+                // img[COMIDA] = ImageIO.read(new File("figuras/food1.png"));
                 // Personagens e suas transições
-                img[PRETO] = ImageIO.read(new File("puffle.png"));
-                img[ESTADO_AZUL] = ImageIO.read(new File("puffle_azul.png"));
-                img[ESTADO_COME] = ImageIO.read(new File("azul_come.png"));
+                img[PRETO] = ImageIO.read(new File("figuras/puffle.png"));
+                img[ESTADO_AZUL] = ImageIO.read(new File("figuras/puffle_azul.png"));
+                img[ESTADO_COME] = ImageIO.read(new File("figuras/azul_come.png"));
             } catch(IOException e){
                 JOptionPane.showMessageDialog(this, "Erro no carregamento da imagem\n"+e, "Erro", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
@@ -54,8 +76,10 @@ class Jogo extends JFrame{
             g.drawImage(img[FUNDO], 0, 0, getSize().width, getSize().height, this);
             // Jogador 1
             g.drawImage(img[estado], posX, getSize().height - img[estado].getHeight(this) - 10, this);
-            // Jogador 2 constante
+            // Jogador 2 (constante)
             g.drawImage(img[PRETO], posXPlayer2, getSize().height - img[PRETO].getHeight(this) - 10, this);
+            // Gera os alvos (comidas)
+            new PainelComida();
             Toolkit.getDefaultToolkit().sync();    
         }
     }
@@ -73,7 +97,6 @@ class Jogo extends JFrame{
         posX -= 10;
         repaint();
     }
-    // Estado de alimentação
     void comeFruta(){
         if(estado == ESTADO_AZUL)
             estado = ESTADO_COME;
@@ -103,11 +126,6 @@ class Jogo extends JFrame{
         pack();
         setVisible(true);
         addKeyListener(new TrataTeclas()); // classe que trata os eventos ligados às teclas
-        // new Timer(100, new ActionListener(){
-        //     @Override
-        //     public void actionPerformed(ActionEvent ae){
-        //     }
-        // }).start();
     }
 
     static public void main(String args[]){
