@@ -22,19 +22,23 @@ class Jogo extends JFrame{
     int posX = 10; // controla a posição horizontal do jogador
     final int posXPlayer2 = 710; // posição constante do jogador 2
 
-    Image img[] = new Image[20];
-    Timer timer;
-    Desenho des = new Desenho();
+    Random ComRandX = new Random();
+    Random ComRandy = new Random();
 
-    boolean jogoContinua = true;
-    Random nAleatorio = new Random();
+    int Comx, Comy;
+
+    Image img[] = new Image[20];
+    Desenho des = new Desenho();
     
     class Desenho extends JPanel{
         Desenho(){
             try{
                 setPreferredSize(new Dimension(828, 467));
+                // Tela
                 img[FUNDO] = ImageIO.read(new File("fundo.jpg"));
+                // Alvo (comida)
                 img[COMIDA] = ImageIO.read(new File("food1.png"));
+                // Personagens e suas transições
                 img[PRETO] = ImageIO.read(new File("puffle.png"));
                 img[ESTADO_AZUL] = ImageIO.read(new File("puffle_azul.png"));
                 img[ESTADO_COME] = ImageIO.read(new File("azul_come.png"));
@@ -46,14 +50,17 @@ class Jogo extends JFrame{
 
         public void paintComponent(Graphics g){
             super.paintComponent(g);
+            // Tela (fundo)
             g.drawImage(img[FUNDO], 0, 0, getSize().width, getSize().height, this);
-            g.drawImage(img[COMIDA], 50, 50, getSize().width, getSize().height, this);
+            // Jogador 1
             g.drawImage(img[estado], posX, getSize().height - img[estado].getHeight(this) - 10, this);
+            // Jogador 2 constante
             g.drawImage(img[PRETO], posXPlayer2, getSize().height - img[PRETO].getHeight(this) - 10, this);
             Toolkit.getDefaultToolkit().sync();    
         }
     }
 
+    // Funções de movimentação
     void andaPDireita(){
         if(estado == ESTADO_COME)
             estado = ESTADO_AZUL;
@@ -66,6 +73,7 @@ class Jogo extends JFrame{
         posX -= 10;
         repaint();
     }
+    // Estado de alimentação
     void comeFruta(){
         if(estado == ESTADO_AZUL)
             estado = ESTADO_COME;
@@ -95,11 +103,11 @@ class Jogo extends JFrame{
         pack();
         setVisible(true);
         addKeyListener(new TrataTeclas()); // classe que trata os eventos ligados às teclas
-        new Timer(100, new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent ae){
-            }
-        }).start();
+        // new Timer(100, new ActionListener(){
+        //     @Override
+        //     public void actionPerformed(ActionEvent ae){
+        //     }
+        // }).start();
     }
 
     static public void main(String args[]){
