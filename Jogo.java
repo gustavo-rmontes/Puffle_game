@@ -10,27 +10,6 @@ import java.io.*;
 import javax.imageio.*;
 import java.util.Random;
 
-// Painel dos alvos (comida)
-// class PainelComida extends JPanel{
-//     Image img;
-//     Random random = new Random();
-//     int posX = random.nextInt(800);
-//     int posY = 50;
-//     PainelComida(){
-//         try {
-//             Image img = ImageIO.read(new File("figuras/food1.png"));
-//         } catch (IOException e) {
-//             JOptionPane.showMessageDialog(this, "Erro no carregamento da imagem\n"+e, "Erro", JOptionPane.ERROR_MESSAGE);
-//             System.exit(1);
-//         }
-//     }
-
-//     public void paintComponent(Graphics g){
-//         super.paintComponent(g);
-//         g.drawImage(img, posX, posY, getSize().width, getSize().height, this);
-//     }
-// }
-
 class Jogo extends JFrame{
     // Constantes para o vetor de imagens a serem inseridas
     final int FUNDO = 0;
