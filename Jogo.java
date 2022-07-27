@@ -108,11 +108,13 @@ class Jogo extends JFrame{
         pack();
         setVisible(true);
         addKeyListener(new TrataTeclas()); // classe que trata os eventos ligados às teclas
+        
         // Timer para que o alvo (comida) desça
-        t = new Timer(100, new ActionListener(){
+        t = new Timer(30, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae){
                 inc();
+                repaint();
             }
         });
         t.start();
