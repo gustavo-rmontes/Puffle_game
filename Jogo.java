@@ -1,6 +1,8 @@
 // Autores:
-// Gustavo Ribeiro Montes, RA: 211024899
-// Maria Vitoria Brito, RA: 211021164 
+// 1 - Gustavo Ribeiro Montes, RA: 211024899
+// 2 - Maria Vitoria Brito, RA: 211021164 
+
+// criar a class Comida para poder mudar a comX, comY, dy
 
 import java.awt.*;
 import java.awt.event.*;
@@ -8,15 +10,29 @@ import java.awt.image.*;
 import javax.swing.*;
 import java.io.*;
 import javax.imageio.*;
+import java.util.List;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
+import java.util.Vector;
 
-class Jogo extends JFrame{
+class Comida{
+    int comX, comY=50, comDX, comDY;
+    Random random = new Random();
+    Comida(){
+        comX = random.nextInt(700);
+    }
+}
+
+public class Jogo extends JFrame{
     // Constantes para o vetor de imagens a serem inseridas
     final int FUNDO = 0;
     final int PRETO = 1;
     final int ESTADO_AZUL = 2;
     final int ESTADO_COME = 3;
     final int COMIDA = 4;
+
+    List<Comida> listaComida = new LinkedList<Comida>();
 
     int estado = ESTADO_AZUL; // controla as transições de imagem do jogador 1
     int posX = 10; // controla a posição horizontal do jogador
@@ -53,17 +69,19 @@ class Jogo extends JFrame{
             // Jogador 2 (constante)
             g.drawImage(img[PRETO], posXPlayer2, getSize().height - img[PRETO].getHeight(this) - 10, this);
             // Gera os alvos (comidas)
-            g.drawImage(img[COMIDA], comX, comY, this);
+            for(Comida c: listaComida){
+                g.drawImage(img[COMIDA], c.comX, c.comY, this);
+            }
             Toolkit.getDefaultToolkit().sync();    
         }
     }
 
-    Random random = new Random();
-    int comX = random.nextInt(400);
-    int comY = 50;
+
     // Função que decrementa a posição y do alvo (comida)
     public void inc() {
-        comY++;
+        for(Comida c: listaComida){
+            c.comY++;
+        }
     }
 
     // Funções de movimentação
@@ -101,6 +119,21 @@ class Jogo extends JFrame{
         }
     }
     
+    int contaIntervalo = 0;
+    
+    void controlaComida(){
+        if(contaIntervalo++ > 10){
+            contaIntervalo = 0;
+            listaComida.add(new Comida());
+        }
+        for(Iterator<Comida> it = listaComida.iterator(); it.hasNext();){
+            Comida c = it.next(); 
+            if(c.comY > getHeight()/2){
+                it.remove();
+            }
+        }
+    }
+
     Jogo(){
         super("Puffle");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -113,6 +146,7 @@ class Jogo extends JFrame{
         t = new Timer(30, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae){
+                controlaComida();
                 inc();
                 repaint();
             }
