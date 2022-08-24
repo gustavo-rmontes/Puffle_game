@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.Vector;
 
 class Comida{
-    int comX, comY=50, comDX, comDY;
+    int comX, comY=0, comDX, comDY;
     Random random = new Random();
     Comida(){
         comX = random.nextInt(700);
@@ -76,11 +76,26 @@ public class Jogo extends JFrame{
         }
     }
 
-
+    
     // Função que decrementa a posição y do alvo (comida)
     public void inc() {
         for(Comida c: listaComida){
             c.comY++;
+        }
+    }
+    
+    int contaIntervalo = 0;
+    
+    void controlaComida(){
+        if(contaIntervalo++ > 30){
+            contaIntervalo = 0;
+            listaComida.add(new Comida());
+        }
+        for(Iterator<Comida> it = listaComida.iterator(); it.hasNext();){
+            Comida c = it.next(); 
+            if(c.comY > getHeight()){
+                it.remove();
+            }
         }
     }
 
@@ -119,20 +134,6 @@ public class Jogo extends JFrame{
         }
     }
     
-    int contaIntervalo = 0;
-    
-    void controlaComida(){
-        if(contaIntervalo++ > 10){
-            contaIntervalo = 0;
-            listaComida.add(new Comida());
-        }
-        for(Iterator<Comida> it = listaComida.iterator(); it.hasNext();){
-            Comida c = it.next(); 
-            if(c.comY > getHeight()/2){
-                it.remove();
-            }
-        }
-    }
 
     Jogo(){
         super("Puffle");
